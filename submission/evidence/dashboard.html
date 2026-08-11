@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Day 13 AI Observability Dashboard</title>
+  <style>
+    body { background: #0f172a; color: #e2e8f0; font: 16px system-ui, sans-serif; margin: 0; padding: 32px; }
+    header { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 24px; }
+    h1 { margin: 0; }
+    .meta, .threshold { color: #94a3b8; }
+    .grid { display: grid; gap: 16px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .panel { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 20px; }
+    h2 { font-size: 16px; margin: 0 0 16px; color: #cbd5e1; }
+    .value { color: #5eead4; font-size: 24px; font-weight: 700; min-height: 56px; }
+    @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <header><h1>Day 13 AI Observability</h1><p class="meta">Time range: 60 minutes · Refresh: 30 seconds · Source: data/logs.jsonl</p></header>
+  <main class="grid">
+    <section class="panel">
+      <h2>Latency percentiles</h2>
+      <p class="value">P50 1326 ms | P95 3868 ms | P99 4093 ms</p>
+      <p>25 completed responses</p>
+      <p class="threshold">SLO / threshold: P95 ≤ 3000 ms</p>
+    </section>
+
+    <section class="panel">
+      <h2>Request traffic</h2>
+      <p class="value">25 requests</p>
+      <p>Source: request_received events</p>
+      <p class="threshold">SLO / threshold: ≥ 1 request/minute</p>
+    </section>
+
+    <section class="panel">
+      <h2>Error rate and breakdown</h2>
+      <p class="value">0.00%</p>
+      <p>Breakdown: none</p>
+      <p class="threshold">SLO / threshold: ≤ 2%</p>
+    </section>
+
+    <section class="panel">
+      <h2>Cost over time</h2>
+      <p class="value">$0.050745</p>
+      <p>Average $0.002030/response</p>
+      <p class="threshold">SLO / threshold: ≤ $2.50/day</p>
+    </section>
+
+    <section class="panel">
+      <h2>Input and output tokens</h2>
+      <p class="value">835 in | 3216 out</p>
+      <p>Source: response_sent token fields</p>
+      <p class="threshold">SLO / threshold: ≤ 50,000 tokens</p>
+    </section>
+
+    <section class="panel">
+      <h2>Quality proxy</h2>
+      <p class="value">0.87</p>
+      <p>Mean response quality proxy</p>
+      <p class="threshold">SLO / threshold: ≥ 0.75</p>
+    </section></main>
+</body>
+</html>
