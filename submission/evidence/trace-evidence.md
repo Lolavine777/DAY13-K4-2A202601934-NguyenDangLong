@@ -10,3 +10,9 @@ Project: [My Project](https://jp.cloud.langfuse.com/project/cmsoez6r7000wad0fv4f
 
 The challenge trace contains the `retrieve` span at 2.505 seconds and a generation at 2.662 seconds.
 This connects the P95 latency symptom to the retrieval root cause without recording raw user identifiers.
+
+## Screenshots
+
+- [Trace inventory with 17 root traces and 68 observations](langfuse-traces.jpg)
+- [Baseline trace v1 with the retrieve and generate span tree](langfuse-baseline-trace.jpg)
+- [Candidate trace v2 with the retrieve and generate span tree](langfuse-candidate-trace.jpg)
