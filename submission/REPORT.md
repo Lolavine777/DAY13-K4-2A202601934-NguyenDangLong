@@ -24,6 +24,7 @@
 - Evidence correlation ID: `req-a4b6cdb7` liên kết session `k4-challenge-s01` với trace `5dd3f3199b16858aa73ca6dea0aa86fe` và các log request/response tương ứng.
 - Evidence PII redaction: validator quét 97 records và báo `Potential PII leaks detected: 0`; trường người dùng trong log chỉ là `user_id_hash`.
 - Evidence trace waterfall: [trace evidence](evidence/trace-evidence.md) có liên kết trực tiếp đến trace baseline, candidate và trace challenge.
+- Screenshot trace evidence: ![Langfuse trace list](evidence/langfuse-traces.jpg)
 - Giải thích một span đáng chú ý: trong trace challenge, span `retrieve` mất 2.505 giây trong tổng latency generation 2.662 giây, chỉ ra retrieval là nút thắt.
 
 ## 4. Prompt versioning
@@ -33,11 +34,13 @@
 - Version/label candidate: v2, label `candidate`.
 - Trace ID của mỗi version: v1 baseline `79648482039602a16d3b7c1e5bf5dc85`; v2 candidate `4083645850d1f178409cca4b9ec6d301`.
 - Bằng chứng đổi label hoặc rollback: production đã chuyển v1 -> v2 và kiểm tra API trả version 2, sau đó rollback v2 -> v1 và kiểm tra API trả version 1. Giao diện Prompts hiện hiển thị v1 `production, baseline` và v2 `candidate`.
+- Screenshot prompt labels: ![Prompt labels](evidence/langfuse-prompt-labels.jpg)
 
 ## 5. Dashboard, SLO và alerts
 
 - Kết quả `validate_dashboard.py`: hợp lệ 6/6 panel theo dashboard contract.
 - Evidence dashboard: [dashboard.html](evidence/dashboard.html) hiển thị traffic, P50/P95/P99 latency, error rate, quality score, token usage và cost.
+- Screenshot dashboard: ![Runtime dashboard](evidence/dashboard-runtime-middle.jpg)
 - SLO đã chọn và lý do: latency P95 < 2.000 ms và daily cost <= $2.50 để kiểm soát trực tiếp hai tín hiệu ảnh hưởng trải nghiệm và ngân sách.
 - Alert rules và runbook: [alert rules](../config/alert_rules.yaml) có ba symptom alerts `high_p95_latency`, `high_error_rate`, `cost_budget_burn`; [runbook](../docs/alerts.md) có hành động triage và rollback.
 
