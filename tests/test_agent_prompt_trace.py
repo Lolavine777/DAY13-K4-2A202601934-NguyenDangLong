@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 from app import agent as agent_module
+from structlog.contextvars import bind_contextvars, clear_contextvars
 
 
 class ManagedPrompt:
@@ -31,12 +32,13 @@ class RecordingLangfuseClient:
 
 
 def test_agent_links_prompt_version_to_trace_and_generation(monkeypatch) -> None:
-    monkeypatch.setenv("LANGFUSE_PUBLIC_KEY", "test-public-key")
-    monkeypatch.setenv("LANGFUSE_SECRET_KEY", "test-secret-key")
+    monkeypatch.delenv("LANGFUSE_PUBLIC_KEY", raising=False)
+    monkeypatch.delenv("LANGFUSE_SECRET_KEY", raising=False)
     monkeypatch.setenv("LANGFUSE_PROMPT_NAME", "day13-chat")
     monkeypatch.setenv("LANGFUSE_PROMPT_LABEL", "production")
     client = RecordingLangfuseClient()
     monkeypatch.setattr(agent_module, "get_langfuse_client", lambda: client)
+    monkeypatch.setattr(agent_module, "tracing_enabled", lambda: True)
 
     agent = agent_module.LabAgent()
     agent_module.LabAgent.run.__wrapped__(
@@ -54,6 +56,28 @@ def test_agent_links_prompt_version_to_trace_and_generation(monkeypatch) -> None
         "prompt_label": "production",
         "prompt_version": "3",
         "prompt_source": "langfuse",
+        "correlation_id": "MISSING",
     }
     assert generation_update["prompt"] is client.prompt
     assert generation_update["metadata"]["prompt_version"] == "3"
+
+
+def test_agent_links_request_correlation_id_to_trace(monkeypatch) -> None:
+    monkeypatch.delenv("LANGFUSE_PUBLIC_KEY", raising=False)
+    monkeypatch.delenv("LANGFUSE_SECRET_KEY", raising=False)
+    client = RecordingLangfuseClient()
+    monkeypatch.setattr(agent_module, "get_langfuse_client", lambda: client)
+    monkeypatch.setattr(agent_module, "tracing_enabled", lambda: True)
+    clear_contextvars()
+    bind_contextvars(correlation_id="req-trace01")
+
+    agent = agent_module.LabAgent()
+    agent_module.LabAgent.run.__wrapped__(
+        agent,
+        user_id="student-02",
+        feature="monitoring",
+        session_id="session-02",
+        message="Find the slow trace",
+    )
+
+    assert client.trace_updates[-1]["metadata"]["correlation_id"] == "req-trace01"

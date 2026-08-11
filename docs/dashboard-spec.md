@@ -11,6 +11,18 @@ Dashboard chính cần đủ 6 nhóm thông tin:
 5. Tổng token input/output.
 6. Quality proxy.
 
+| Panel | Đơn vị | Ngưỡng hiển thị |
+| --- | --- | --- |
+| Latency percentiles | ms | P95 ≤ 3000 ms |
+| Request traffic | requests/phút | ≥ 1 request/phút |
+| Error rate and breakdown | % | ≤ 2% |
+| Cost over time | USD | tổng ≤ $2.50 |
+| Input and output tokens | tokens | ≤ 50,000 |
+| Quality proxy | score 0-1 | ≥ 0.75 |
+
+Nguồn dữ liệu của cả sáu panel là `data/logs.jsonl`.
+Tất cả panel dùng time range 60 phút và refresh 30 giây theo contract.
+
 Tiêu chuẩn trình bày:
 
 - Khoảng thời gian mặc định: 1 giờ.
