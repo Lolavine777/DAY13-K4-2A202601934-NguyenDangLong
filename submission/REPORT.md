@@ -4,7 +4,7 @@
 
 - Tên nhóm: K4 - Day 13 Observability
 - Repository URL: Git remote đã được cấu hình và push trên tất cả branch phân công.
-- Commit SHA evidence tích hợp: `5d645c7`.
+- Commit SHA merge trên `main`: `30ff874`.
 - Thành viên và vai trò:
   - Nguyễn Đăng Long - tích hợp API, correlation context và kiểm thử E2E.
   - Đào Minh Chiến - PII redaction và kiểm thử bảo mật log.
