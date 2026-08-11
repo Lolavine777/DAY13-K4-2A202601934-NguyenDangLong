@@ -3,8 +3,8 @@
 ## 1. Thông tin nhóm
 
 - Tên nhóm: K4 - Day 13 Observability
-- Repository URL: https://github.com/Lolavine777/DAY13-K4-2A202601934-NguyenDangLong
-- Commit SHA cuối: cập nhật ở commit tích hợp cuối cùng.
+- Repository URL: Git remote đã được cấu hình và push trên tất cả branch phân công.
+- Commit SHA evidence tích hợp: `5d645c7`.
 - Thành viên và vai trò:
   - Nguyễn Đăng Long - tích hợp API, correlation context và kiểm thử E2E.
   - Đào Minh Chiến - PII redaction và kiểm thử bảo mật log.
@@ -57,8 +57,8 @@ Với mỗi thành viên, ghi rõ nhiệm vụ và link commit/PR tương ứng.
 
 | Thành viên | Phần việc | Commit/PR | Điều đã học |
 |---|---|---|---|
-| Nguyễn Đăng Long | Request correlation, context enrichment, tích hợp | [6cad71f](https://github.com/Lolavine777/DAY13-K4-2A202601934-NguyenDangLong/commit/6cad71f) | Correlation ID biến metrics, traces và logs thành một luồng điều tra thống nhất. |
-| Đào Minh Chiến | PII redaction | [f3748eb](https://github.com/Lolavine777/DAY13-K4-2A202601934-NguyenDangLong/commit/f3748eb) | Redaction phải chạy đệ quy trước khi structured log được ghi ra disk. |
-| Lương Minh Quân | Metrics và dashboard | [0d81a07](https://github.com/Lolavine777/DAY13-K4-2A202601934-NguyenDangLong/commit/0d81a07) | Dashboard hữu ích khi panel gắn với một câu hỏi vận hành cụ thể. |
-| Lê Đăng Tấn | SLO, alerts và runbook | [be2519e](https://github.com/Lolavine777/DAY13-K4-2A202601934-NguyenDangLong/commit/be2519e) | Alert theo triệu chứng giảm nhiễu và hướng điều tra rõ hơn. |
-| Vũ Hữu An | Trace correlation, prompt versioning, evidence | [247b28d](https://github.com/Lolavine777/DAY13-K4-2A202601934-NguyenDangLong/commit/247b28d) | Prompt label và trace metadata giúp rollout, rollback có thể kiểm chứng. |
+| Nguyễn Đăng Long | Request correlation, context enrichment, tích hợp | `6cad71f` | Correlation ID biến metrics, traces và logs thành một luồng điều tra thống nhất. |
+| Đào Minh Chiến | PII redaction | `f3748eb` | Redaction phải chạy đệ quy trước khi structured log được ghi ra disk. |
+| Lương Minh Quân | Metrics và dashboard | `0d81a07` | Dashboard hữu ích khi panel gắn với một câu hỏi vận hành cụ thể. |
+| Lê Đăng Tấn | SLO, alerts và runbook | `be2519e` | Alert theo triệu chứng giảm nhiễu và hướng điều tra rõ hơn. |
+| Vũ Hữu An | Trace correlation, prompt versioning, evidence | `247b28d`, `678c972` | Prompt label và trace metadata giúp rollout, rollback có thể kiểm chứng. |
