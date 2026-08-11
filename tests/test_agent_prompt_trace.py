@@ -32,12 +32,13 @@ class RecordingLangfuseClient:
 
 
 def test_agent_links_prompt_version_to_trace_and_generation(monkeypatch) -> None:
-    monkeypatch.setenv("LANGFUSE_PUBLIC_KEY", "test-public-key")
-    monkeypatch.setenv("LANGFUSE_SECRET_KEY", "test-secret-key")
+    monkeypatch.delenv("LANGFUSE_PUBLIC_KEY", raising=False)
+    monkeypatch.delenv("LANGFUSE_SECRET_KEY", raising=False)
     monkeypatch.setenv("LANGFUSE_PROMPT_NAME", "day13-chat")
     monkeypatch.setenv("LANGFUSE_PROMPT_LABEL", "production")
     client = RecordingLangfuseClient()
     monkeypatch.setattr(agent_module, "get_langfuse_client", lambda: client)
+    monkeypatch.setattr(agent_module, "tracing_enabled", lambda: True)
 
     agent = agent_module.LabAgent()
     agent_module.LabAgent.run.__wrapped__(
@@ -62,10 +63,11 @@ def test_agent_links_prompt_version_to_trace_and_generation(monkeypatch) -> None
 
 
 def test_agent_links_request_correlation_id_to_trace(monkeypatch) -> None:
-    monkeypatch.setenv("LANGFUSE_PUBLIC_KEY", "test-public-key")
-    monkeypatch.setenv("LANGFUSE_SECRET_KEY", "test-secret-key")
+    monkeypatch.delenv("LANGFUSE_PUBLIC_KEY", raising=False)
+    monkeypatch.delenv("LANGFUSE_SECRET_KEY", raising=False)
     client = RecordingLangfuseClient()
     monkeypatch.setattr(agent_module, "get_langfuse_client", lambda: client)
+    monkeypatch.setattr(agent_module, "tracing_enabled", lambda: True)
     clear_contextvars()
     bind_contextvars(correlation_id="req-trace01")
 
