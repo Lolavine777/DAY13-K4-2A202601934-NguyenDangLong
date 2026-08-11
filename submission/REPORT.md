@@ -3,8 +3,8 @@
 ## 1. Thông tin nhóm
 
 - Tên nhóm: K4 - ĐỘ MESSIU
-- Repository URL: Git remote đã được cấu hình và push trên tất cả branch phân công.
-- Commit SHA merge trên `main`: `30ff874`.
+- Repository source: nhánh `main` của bài nộp, với URL trực tiếp được điền tại trường Repository URL trong Codelabs.
+- Commit SHA để nộp: `HEAD` của nhánh `main` tại thời điểm submit.
 - Thành viên và vai trò:
   - Nguyễn Đăng Long - tích hợp API, correlation context và kiểm thử E2E.
   - Đào Minh Chiến - PII redaction và kiểm thử bảo mật log.
@@ -24,7 +24,9 @@
 - Evidence correlation ID: `req-a4b6cdb7` liên kết session `k4-challenge-s01` với trace `5dd3f3199b16858aa73ca6dea0aa86fe` và các log request/response tương ứng.
 - Evidence PII redaction: validator quét 97 records và báo `Potential PII leaks detected: 0`; trường người dùng trong log chỉ là `user_id_hash`.
 - Evidence trace waterfall: [trace evidence](evidence/trace-evidence.md) có liên kết trực tiếp đến trace baseline, candidate và trace challenge.
-- Screenshot trace evidence: ![Langfuse trace list](evidence/langfuse-traces.jpg)
+- Screenshot trace inventory: ![Langfuse trace list](evidence/langfuse-traces.jpg)
+- Screenshot baseline trace: ![Baseline trace v1](evidence/langfuse-baseline-trace.jpg)
+- Screenshot candidate trace: ![Candidate trace v2](evidence/langfuse-candidate-trace.jpg)
 - Giải thích một span đáng chú ý: trong trace challenge, span `retrieve` mất 2.505 giây trong tổng latency generation 2.662 giây, chỉ ra retrieval là nút thắt.
 
 ## 4. Prompt versioning
@@ -33,23 +35,26 @@
 - Version/label baseline: v1, labels `baseline` và `production` sau rollback.
 - Version/label candidate: v2, label `candidate`.
 - Trace ID của mỗi version: v1 baseline `79648482039602a16d3b7c1e5bf5dc85`; v2 candidate `4083645850d1f178409cca4b9ec6d301`.
-- Bằng chứng đổi label hoặc rollback: production đã chuyển v1 -> v2 và kiểm tra API trả version 2, sau đó rollback v2 -> v1 và kiểm tra API trả version 1. Giao diện Prompts hiện hiển thị v1 `production, baseline` và v2 `candidate`.
-- Screenshot prompt labels: ![Prompt labels](evidence/langfuse-prompt-labels.jpg)
+- Bằng chứng đổi label hoặc rollback: production đã chuyển v1 -> v2 và kiểm tra API trả `production_after_shift=v2`, sau đó rollback v2 -> v1 và kiểm tra API trả `production_after_rollback=v1`.
+- Evidence rollout và rollback: [prompt label evidence](evidence/prompt-rollout-evidence.md).
+- Screenshot prompt rollback: ![Prompt v1 production after rollback](evidence/langfuse-production-v1-rollback.jpg)
 
 ## 5. Dashboard, SLO và alerts
 
 - Kết quả `validate_dashboard.py`: hợp lệ 6/6 panel theo dashboard contract.
+- Evidence validator: [dashboard validator result](evidence/dashboard-validator-evidence.md).
 - Evidence dashboard: [dashboard.html](evidence/dashboard.html) hiển thị traffic, P50/P95/P99 latency, error rate, quality score, token usage và cost.
 - Screenshot dashboard: ![Runtime dashboard](evidence/dashboard-runtime-middle.jpg)
-- SLO đã chọn và lý do: latency P95 < 2.000 ms và daily cost <= $2.50 để kiểm soát trực tiếp hai tín hiệu ảnh hưởng trải nghiệm và ngân sách.
-- Alert rules và runbook: [alert rules](../config/alert_rules.yaml) có ba symptom alerts `high_p95_latency`, `high_error_rate`, `cost_budget_burn`; [runbook](../docs/alerts.md) có hành động triage và rollback.
+- SLO đã chọn và lý do: dashboard contract theo dõi P95 <= 3.000 ms và daily cost <= $2.50 để kiểm soát trực tiếp hai tín hiệu ảnh hưởng trải nghiệm và ngân sách.
+- Alert rules và runbook: [alert rules](../config/alert_rules.yaml) có ba symptom alerts `high_latency_p95`, `elevated_error_rate`, `cost_budget_exceeded`; [runbook](../docs/alerts.md) có hành động triage và rollback.
 
 ## 6. Điều tra challenge
 
 - Challenge ID: `day13-k4-observability-v1`.
-- Triệu chứng từ metrics: P50 2.662 ms, P95 3.112 ms, P99 3.112 ms, vượt ngưỡng 2.000 ms, trong khi error rate vẫn 0% và traffic là 5.
+- Triệu chứng từ metrics: P50 2.662 ms, P95 3.112 ms, P99 3.112 ms, vượt ngưỡng challenge 2.000 ms và cả ngưỡng dashboard 3.000 ms, trong khi error rate vẫn 0% và traffic là 5.
 - Trace ID liên quan: `5dd3f3199b16858aa73ca6dea0aa86fe`.
 - Log line/correlation ID liên quan: `req-a4b6cdb7`, session `k4-challenge-s01`.
+- Evidence metrics -> trace -> logs: [challenge evidence](evidence/challenge-evidence.md) và [redacted log evidence](evidence/log-pii-evidence.md).
 - Root cause: incident `rag_slow` làm span `retrieve` chậm 2.505 giây.
 - Fix action: tắt incident sau khi thu thập evidence và xác nhận `rag_slow: false`.
 - Preventive measure: giữ alert P95 latency, dashboard latency percentiles và runbook yêu cầu mở trace rồi lọc log theo correlation ID trước khi rollback.
@@ -61,7 +66,7 @@ Với mỗi thành viên, ghi rõ nhiệm vụ và link commit/PR tương ứng.
 | Thành viên | Phần việc | Commit/PR | Điều đã học |
 |---|---|---|---|
 | Nguyễn Đăng Long | Request correlation, context enrichment, tích hợp | `6cad71f` | Correlation ID biến metrics, traces và logs thành một luồng điều tra thống nhất. |
-| Đào Minh Chiến | PII redaction | `f3748eb` | Redaction phải chạy đệ quy trước khi structured log được ghi ra disk. |
-| Lương Minh Quân | Metrics và dashboard | `0d81a07` | Dashboard hữu ích khi panel gắn với một câu hỏi vận hành cụ thể. |
+| Đào Minh Chiến | PII redaction và log evidence | `f3748eb`, `c51799c` | Redaction phải chạy đệ quy trước khi structured log được ghi ra disk. |
+| Lương Minh Quân | Metrics, dashboard và validator evidence | `0d81a07`, `bd3e37d` | Dashboard hữu ích khi panel gắn với một câu hỏi vận hành cụ thể. |
 | Lê Đăng Tấn | SLO, alerts và runbook | `be2519e` | Alert theo triệu chứng giảm nhiễu và hướng điều tra rõ hơn. |
-| Vũ Hữu An | Trace correlation, prompt versioning, evidence | `247b28d`, `678c972` | Prompt label và trace metadata giúp rollout, rollback có thể kiểm chứng. |
+| Vũ Hữu An | Trace correlation, prompt versioning, evidence | `247b28d`, `678c972`, `8234aec` | Prompt label và trace metadata giúp rollout, rollback có thể kiểm chứng. |
