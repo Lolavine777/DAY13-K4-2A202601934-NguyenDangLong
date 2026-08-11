@@ -2,7 +2,7 @@
 
 ## 1. Thông tin nhóm
 
-- Tên nhóm: K4 - Day 13 Observability
+- Tên nhóm: K4 - ĐỘ MESSIU
 - Repository URL: Git remote đã được cấu hình và push trên tất cả branch phân công.
 - Commit SHA merge trên `main`: `30ff874`.
 - Thành viên và vai trò:
