@@ -14,15 +14,15 @@
 
 ## 2. Kết quả kỹ thuật
 
-- Điểm `validate_logs.py`: 100/100 trên 76 log records, 37 correlation IDs và 0 PII leak.
-- Tổng số traces: 7 trace thật trong project Langfuse hiện tại, gồm baseline, candidate và 5 trace challenge.
+- Điểm `validate_logs.py`: 100/100 trên 97 log records, 47 correlation IDs và 0 PII leak.
+- Tổng số traces: 17 trace thật trong project Langfuse hiện tại, vượt mốc 10 trace của codelab.
 - Số PII leak còn lại: 0.
 - Link/đường dẫn dashboard: [dashboard.html](evidence/dashboard.html).
 
 ## 3. Logging và tracing
 
 - Evidence correlation ID: `req-a4b6cdb7` liên kết session `k4-challenge-s01` với trace `5dd3f3199b16858aa73ca6dea0aa86fe` và các log request/response tương ứng.
-- Evidence PII redaction: validator quét 76 records và báo `Potential PII leaks detected: 0`; trường người dùng trong log chỉ là `user_id_hash`.
+- Evidence PII redaction: validator quét 97 records và báo `Potential PII leaks detected: 0`; trường người dùng trong log chỉ là `user_id_hash`.
 - Evidence trace waterfall: [trace evidence](evidence/trace-evidence.md) có liên kết trực tiếp đến trace baseline, candidate và trace challenge.
 - Giải thích một span đáng chú ý: trong trace challenge, span `retrieve` mất 2.505 giây trong tổng latency generation 2.662 giây, chỉ ra retrieval là nút thắt.
 
